@@ -148,9 +148,9 @@ h1 {
     z-index: -100;
 }
 
-main {
-
-    background-size:cover;
+#app > .container{
+    background-size: cover;
+    background-position: center;
 }
 
 .flexbox {
