@@ -114,12 +114,12 @@ class OpenWeatherStore extends EventEmitter {
         // var iconID=this.convertOpenWeatherIdToImgId(weatherId);
 
         var iconID = this.isDay() ? "day" : "night";
-        return "/img/bg/weather/" + iconID + ".jpg";//todo: use method to generate URL with global params
+        return "img/bg/weather/" + iconID + ".jpg";//todo: use method to generate URL with global params
     }
 
     getIconURL(useDayAndNight, weatherID) {
         const iconID = this.convertOpenWeatherIdToImgId(weatherID, useDayAndNight);
-        return "/img/icon/weather/" + iconID + ".png";//todo: use method to generate URL with global params
+        return "img/icon/weather/" + iconID + ".png";//todo: use method to generate URL with global params
     }
 
 }
