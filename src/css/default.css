@@ -171,9 +171,11 @@ h1 {
 
 .container.search{
     padding:10px;
+    display: flex;
+    justify-content: center;
 }
 .container.search > input{
-    margin:0 auto;
+    margin:0;
     border:1px solid rgba(255, 255, 255, 0.6);
     background:transparent;
     padding:10px;
@@ -192,4 +194,9 @@ span + a{/*fix: add spacing between generated anchor tag (from IndexRoute) and o
 
 span + a{
     color:lightblue;
+}
+
+.switchTemp{
+    color: #000;;
+    margin-top: 10px
 }

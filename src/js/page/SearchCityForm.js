@@ -18,10 +18,12 @@ export default class SearchCityForm extends React.Component {
         return (
             <form class="flexbox container search" action="#" onSubmit={this.onSubmitCity.bind(this)}>
                 <input type="search" autoCapitalize="true" autoComplete="off" onChange={this.onInputChange.bind(this)} autoFocus="autofocus" placeholder="Search Location..." className="search-input"/>
+                <button type="submit" className="switchTemp">Celsius</button>
+                <button type="submit" className="switchTemp">Fahrenheit</button>
             </form>
         );
     }
-    
+
 
 }
 SearchCityForm.contextTypes = {
