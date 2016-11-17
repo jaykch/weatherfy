@@ -7,29 +7,28 @@ import OpenWeatherStore from "../store/OpenWeatherStore";
 import * as WeatherAction from '../action/WeatherAction';
 
 export default class Overview extends React.Component {
-    
+
     constructor(props) {
         super(props);
         this.getCityWeatherInfo = this.getCityWeatherInfo.bind(this);
         const {cityName} =props.routeParams;
-        this.state={
+        this.state = {
             cityWeatherInfo: OpenWeatherStore.getCityWeatherInfo()
         };
-        this.cityName="";
-
+        this.cityName = "";
         this.loadCityWeatherInfo(cityName);
 
     }
-    
+
     componentWillMount() {
         OpenWeatherStore.on("change", this.getCityWeatherInfo);
     }
 
-    componentWillReceiveProps(newProps){
+    componentWillReceiveProps(newProps) {
         const {cityName} =newProps.routeParams;
 
-        if (this.cityName==cityName) return;
-        this.cityName=cityName;
+        if (this.cityName == cityName) return;
+        this.cityName = cityName;
         this.loadCityWeatherInfo(cityName);
 
     }
@@ -39,8 +38,9 @@ export default class Overview extends React.Component {
         //const {cityName} =this.props.routeParams;
 
         //this.loadCityWeatherInfo(cityName);
-        
+
     }
+
     componentWillUnmount() {
         OpenWeatherStore.removeListener("change", this.getCityWeatherInfo);
         this.setState({
@@ -52,6 +52,11 @@ export default class Overview extends React.Component {
         WeatherAction.searchCity(cityName);
     }
 
+    changeToF(){
+        var cityWeatherInfo =  OpenWeatherStore.getCityWeatherInfo();
+        WeatherAction.searchCity(cityWeatherInfo.name, "imperial");
+    }
+
     getCityWeatherInfo() {
 
         this.setState({
@@ -59,26 +64,30 @@ export default class Overview extends React.Component {
         });
 
         this.setState({
-            weatherState: OpenWeatherStore.isDay(this.state.cityWeatherInfo.dt)?"day":"night"
+            weatherState: OpenWeatherStore.isDay(this.state.cityWeatherInfo.dt) ? "day" : "night"
         });
     }
 
     render() {
-        const w=this.state.cityWeatherInfo;
+        const w = this.state.cityWeatherInfo;
 
-        const currentTempIconURL=OpenWeatherStore.getIconURL(true);
+        const currentTempIconURL = OpenWeatherStore.getIconURL(true);
 
         return (
             <main class="container overview flex-col justify-around align-center">
                 <section id="today-forecast" class="flex-row justify-center align-center">
-                    <TodayForecast city={w.name} countryCode={w.sys.country} minTempC={w.main.temp_min} currentTempC={w.main.temp} maxTempC={w.main.temp_max} currentWeatherDescription={w.weather[0].description} currentWeatherTitle={w.weather[0].main} currentTempIconURL={currentTempIconURL} />
-                    <TodayHumidity humidityReading={w.main.humidity} />
+                    <TodayForecast city={w.name} countryCode={w.sys.country} minTempC={w.main.temp_min}
+                                   currentTempC={w.main.temp} maxTempC={w.main.temp_max}
+                                   currentWeatherDescription={w.weather[0].description}
+                                   currentWeatherTitle={w.weather[0].main} currentTempIconURL={currentTempIconURL}/>
+                    <TodayHumidity humidityReading={w.main.humidity}/>
+                    <button onClick={this.changeToF} class="fahrenheit-button">Convert to fahrenheit</button>
                 </section>
                 <section>
-                    <WeekForecast cityID={w.id} cityName={w.name} />
+                    <WeekForecast cityID={w.id} cityName={w.name}/>
                 </section>
                 <section>
-                    <DailyTemperatureLineChart cityID={w.id} cityName={w.name} />
+                    <DailyTemperatureLineChart cityID={w.id} cityName={w.name}/>
                 </section>
             </main>
         );

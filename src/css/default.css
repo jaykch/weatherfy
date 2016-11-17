@@ -196,7 +196,6 @@ span + a{
     color:lightblue;
 }
 
-.switchTemp{
-    color: #000;;
-    margin-top: 10px
+.fahrenheit-button{
+    color: black;
 }

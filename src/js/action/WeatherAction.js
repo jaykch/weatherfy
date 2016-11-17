@@ -23,7 +23,7 @@ export function loadDayForecast(cityID, cityName) {
 
     console.trace("loadDayForecast");
 
-    this.loadDayForecastReq = $.getJSON("http://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&units=metric&appid=" + config.OPEN_WEATHER_API.WEB_KEY, function (cityWeatherDayForecast) {
+    this.loadDayForecastReq = $.getJSON("http://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&units=" + config.TEMPERATURE_CONFIG.METRIC + "&appid=" + config.OPEN_WEATHER_API.WEB_KEY, function (cityWeatherDayForecast) {
         dispatcher.dispatch({type: "WEATHER_CITY_DAY_FORECAST_UPDATE", cityWeatherDayForecast});
     }.bind(this), function (err) {
         dispatcher.dispatch({
@@ -34,21 +34,41 @@ export function loadDayForecast(cityID, cityName) {
 
 
 }
-export function searchCity(cityName) {
-
+export function searchCity(cityName, unit) {
     console.trace("searchCity:" + cityName);
-    if (this.searchCityReq) this.searchCityReq.abort();
+    if(!unit){
+        if (this.searchCityReq) this.searchCityReq.abort();
 
-    this.searchCityReq = $.getJSON("http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=" + config.TEMPERATURE_CONFIG.IMPERIAL + "&appid=" + config.OPEN_WEATHER_API.WEB_KEY, function (cityWeatherInfo) {
-        if (cityWeatherInfo.cod == "200") {
-            dispatcher.dispatch({type: "WEATHER_CITY_UPDATE", cityWeatherInfo});
-        } else {
-            dispatcher.dispatch({type: "WEATHER_ERROR", message: "Failed to find city"});
-        }
-    }.bind(this), function (err) {
-        dispatcher.dispatch({
-            type: "WEATHER_ERROR",
-            message: "Failed to load weather info for specified city: '" + cityName + "'"
-        });
-    }.bind(this));
+        this.searchCityReq = $.getJSON("http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=" + config.TEMPERATURE_CONFIG.METRIC + "&appid=" + config.OPEN_WEATHER_API.WEB_KEY, function (cityWeatherInfo) {
+            if (cityWeatherInfo.cod == "200") {
+                dispatcher.dispatch({type: "WEATHER_CITY_UPDATE", cityWeatherInfo});
+            } else {
+                dispatcher.dispatch({type: "WEATHER_ERROR", message: "Failed to find city"});
+            }
+        }.bind(this), function (err) {
+            dispatcher.dispatch({
+                type: "WEATHER_ERROR",
+                message: "Failed to load weather info for specified city: '" + cityName + "'"
+            });
+        }.bind(this));
+    }
+
+    if(unit == "imperial"){
+        if (this.searchCityReq) this.searchCityReq.abort();
+
+        this.searchCityReq = $.getJSON("http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=" + config.TEMPERATURE_CONFIG.IMPERIAL + "&appid=" + config.OPEN_WEATHER_API.WEB_KEY, function (cityWeatherInfo) {
+            if (cityWeatherInfo.cod == "200") {
+                dispatcher.dispatch({type: "WEATHER_CITY_UPDATE", cityWeatherInfo});
+            } else {
+                dispatcher.dispatch({type: "WEATHER_ERROR", message: "Failed to find city"});
+            }
+        }.bind(this), function (err) {
+            dispatcher.dispatch({
+                type: "WEATHER_ERROR",
+                message: "Failed to load weather info for specified city: '" + cityName + "'"
+            });
+        }.bind(this));
+
+    }
+
 }
